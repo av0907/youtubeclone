@@ -1,16 +1,64 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { toggleMenu } from '../utils/appSlice';
 import { Link } from 'react-router-dom';
+import store from '../utils/store';
+import { storeCache } from '../utils/searchResultsSlice';
+import { YOUTUBE_SEARCH_SUGGESTIONS_API } from '../utils/constants';
 
 const Header = () => {
 
     const dispatch = useDispatch();
+    const keyInCache = useSelector(store=>store.search);
+    const [searchParameter, setSearchParameter] = useState("");
+    const [showSuggestionsBox, setSuggestionsBox] = useState(false);
+    const [suggestionsList, setSuggestionsList] = useState([])
+    //console.log("SEARCH" + searchParameter);
 
     const toggleMenuHandler = () =>{
         dispatch(toggleMenu())
     }
 
+
+    useEffect(()=>{
+        let timer;
+        if(keyInCache[searchParameter])
+            {
+                setSuggestionsList(keyInCache[searchParameter]);
+            }
+        else{
+             timer = setTimeout(()=>{getSearchResults()},200);
+        }
+
+        return ()=>{
+            clearTimeout(timer);
+        }
+            
+    }, [searchParameter])
+
+    const getSearchResults = async () =>{
+        const data = await fetch(YOUTUBE_SEARCH_SUGGESTIONS_API+searchParameter);
+        const json = await data.json();
+        //console.log("API call is made");
+        setSuggestionsList(json[1])
+        dispatch(storeCache({
+            [searchParameter] : json[1]
+        }))
+        //setSuggestionsBox(true);
+
+    }
+
+    const changeSearchParameter = (s) =>{
+        //alert("ABC");
+        //console.log(s);
+        setSearchParameter(s);
+        setSuggestionsBox(false);
+    }
+
+    const closeSuggestionsBox = () =>{
+        setTimeout(()=>{setSuggestionsBox(false)},100);
+    }
+    
     return( 
 
     <div className='grid grid-flow-col shadow-md'>
@@ -20,9 +68,14 @@ const Header = () => {
         </div>
 
         <div className='col-span-10 text-center p-2 place-content-center'>
-            <input className='h-10 border border-gray-300 text-lg w-1/2 rounded-l-full p-2' type='text'/>
+            <input className='h-10 border border-gray-300 text-lg w-1/2 rounded-l-full p-2' type='text' placeholder='Search' value={searchParameter} onChange={(e)=>{setSearchParameter(e.target.value)}} onFocus={()=>{setSuggestionsBox(true)}} onBlur={()=> {closeSuggestionsBox() }} />
             <button className='h-10  border border-gray-300 w-14 rounded-r-full  hover:cursor-pointer bg-gray-200 hover:bg-gray-300 '>🔍</button>
-            
+            <div className='absolute text-left bg-white w-[35rem] left-[31rem] border border-t-white border-gray-200 rounded-xl'>
+                <ul className='rounded-2xl hover:rounded-2xl'>
+                    
+                    { showSuggestionsBox && suggestionsList.map((s) => <li onClick={()=>{changeSearchParameter(s)}} key={s} className='p-2 hover:bg-gray-200 hover:cursor-pointer'>{s}</li> )  }
+                </ul>
+            </div>
           </div>
 
         <div className='col-span-1 flex justify-end'>
