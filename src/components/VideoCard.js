@@ -6,7 +6,7 @@ const VideoCard = ({cardlist})=>{
     //console.log("CARD LIST",cardlist);
 
     //const {snippet} = cardlist;
-    console.log(cardlist);
+    //console.log(cardlist);
     //console.log(cardlist.etag);
     //console.log(cardlist.snippet.thumbnails.medium.url);
     return(

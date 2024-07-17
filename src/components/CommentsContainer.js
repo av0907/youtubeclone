@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { YOUTUBE_API_KEY, YOUTUBE_COMMENTS_API, YOUTUBE_COMMENTS_API_OLD } from "../utils/constants";
 
 
-const commentsData = [
+const commentsData_old = [
 
     {
         name:"Aditya",
@@ -39,10 +40,10 @@ const commentsData = [
     }
     ]
 const Comment = ({data})=>{
-    const {name, comment,replies} = data;
+    //const {name, comment,replies} = data;
     return <div className="ml-5 pr-7">
-                <h2 className="font-bold bg-gray-200">{name}</h2>
-                <p>{comment}</p>
+                <h2 className="font-bold bg-gray-200">{data.snippet.topLevelComment.snippet.authorDisplayName}</h2>
+                <p>{data.snippet.topLevelComment.snippet.textDisplay}</p>
             </div>
 }
 
@@ -51,13 +52,24 @@ const CommentsList = ({commentsList}) =>{
             <div>
                 <Comment data={item}/>
                 <div className="ml-5">
-                    <CommentsList commentsList={item.replies}/>
+                 {/*item.replies.comments && <CommentsList commentsList={item.replies.comments}/>*/}
                 </div>
             </div>
             ))
 }
-const CommentsContainer = ()=>{
-    return <div className="ml-5 text-lg"> <h2> Comments</h2>
+const CommentsContainer = ({videoId})=>{
+    const [commentsData, setCommentsData] = useState([]);
+
+    const getCommentsData = async () =>{
+        const data = await fetch(YOUTUBE_COMMENTS_API+videoId+"&key="+YOUTUBE_API_KEY);
+        const json = await data.json();
+        setCommentsData(json.items);
+
+    }
+    useEffect(()=>{
+        getCommentsData();
+    },[])
+    return <div className="ml-5 text-lg w-[1040px]"> <h2> Comments</h2>
 
         <CommentsList commentsList={commentsData}/>
        </div>

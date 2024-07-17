@@ -38,8 +38,7 @@ const Header = () => {
 
     const getSearchResults = async () =>{
         const data = await fetch(YOUTUBE_SEARCH_SUGGESTIONS_API+searchParameter);
-        const json = await data.json();
-        //console.log("API call is made");
+        const json = await data.json();       
         setSuggestionsList(json[1])
         dispatch(storeCache({
             [searchParameter] : json[1]
@@ -73,7 +72,7 @@ const Header = () => {
             <div className='absolute text-left bg-white w-[35rem] left-[31rem] border border-t-white border-gray-200 rounded-xl'>
                 <ul className='rounded-2xl hover:rounded-2xl'>
                     
-                    { showSuggestionsBox && suggestionsList.map((s) => <li onClick={()=>{changeSearchParameter(s)}} key={s} className='p-2 hover:bg-gray-200 hover:cursor-pointer'>{s}</li> )  }
+                    { showSuggestionsBox && suggestionsList.map((s) => <li onClick={()=>{alert(s)}} key={s} className='p-2 hover:bg-gray-200 hover:cursor-pointer'>{s}</li> )  }
                 </ul>
             </div>
           </div>
