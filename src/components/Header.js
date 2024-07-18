@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleMenu } from '../utils/appSlice';
+import { requestVideos, toggleMenu } from '../utils/appSlice';
 import { Link } from 'react-router-dom';
 import store from '../utils/store';
 import { storeCache } from '../utils/searchResultsSlice';
@@ -72,7 +72,7 @@ const Header = () => {
             <div className='absolute text-left bg-white w-[35rem] left-[31rem] border border-t-white border-gray-200 rounded-xl'>
                 <ul className='rounded-2xl hover:rounded-2xl'>
                     
-                    { showSuggestionsBox && suggestionsList.map((s) => <li onClick={()=>{alert(s)}} key={s} className='p-2 hover:bg-gray-200 hover:cursor-pointer'>{s}</li> )  }
+                    { showSuggestionsBox && suggestionsList.map((s) => <li onClick={()=>{dispatch(requestVideos(s));setSearchParameter("")}} key={s} className='p-2 hover:bg-gray-200 hover:cursor-pointer'>{s}</li> )  }
                 </ul>
             </div>
           </div>

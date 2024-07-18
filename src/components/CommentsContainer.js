@@ -10,7 +10,9 @@ const commentsData_old = [
         replies:[{
                 name:"Aditya",
                 comment:"Comment-Reply",
-                replies:[]
+                replies:[{
+                    name:"Aditya",
+                    comment:"Comment-Reply",}]
         }]
     },
     {
@@ -40,10 +42,10 @@ const commentsData_old = [
     }
     ]
 const Comment = ({data})=>{
-    //const {name, comment,replies} = data;
+    const {name, comment,replies} = data;
     return <div className="ml-5 pr-7">
-                <h2 className="font-bold bg-gray-200">{data.snippet.topLevelComment.snippet.authorDisplayName}</h2>
-                <p>{data.snippet.topLevelComment.snippet.textDisplay}</p>
+                <h2 className="font-bold bg-gray-200">{name}</h2>
+                <p>{comment}</p>
             </div>
 }
 
@@ -52,13 +54,13 @@ const CommentsList = ({commentsList}) =>{
             <div>
                 <Comment data={item}/>
                 <div className="ml-5">
-                 {/*item.replies.comments && <CommentsList commentsList={item.replies.comments}/>*/}
+                 {item.replies.comments && <CommentsList commentsList={item.replies.comments}/>}
                 </div>
             </div>
             ))
 }
 const CommentsContainer = ({videoId})=>{
-    const [commentsData, setCommentsData] = useState([]);
+   /* const [commentsData, setCommentsData] = useState([]);
 
     const getCommentsData = async () =>{
         const data = await fetch(YOUTUBE_COMMENTS_API+videoId+"&key="+YOUTUBE_API_KEY);
@@ -68,10 +70,10 @@ const CommentsContainer = ({videoId})=>{
     }
     useEffect(()=>{
         getCommentsData();
-    },[])
+    },[])*/
     return <div className="ml-5 text-lg w-[1040px]"> <h2> Comments</h2>
 
-        <CommentsList commentsList={commentsData}/>
+        <CommentsList commentsList={commentsData_old}/>
        </div>
 }
 
