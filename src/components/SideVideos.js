@@ -35,14 +35,16 @@ const SideVideos = ({videoData})=>{
         top: 0,
         behavior: 'instant'  // Optional: Smooth scrolling behavior
       });}} className=" flex flex-col items-center pl-6 py-2 ">
-             <img className="rounded-lg items-center h-[150px] w-[280px]" src={videoData.snippet.thumbnails.medium.url} />
-             <div className="w-[280px] p-1">
-                <h2 className="font-semibold">{videoData.snippet.title.substring(0,33)+"..."}</h2>
-                <h2 className="text-slate-600 font-semibold">{videoData.snippet.channelTitle}</h2>
-                <h2> {t}</h2>
-             </div>
+            <div className="flex flex-row overflow-hidden">
+                <img className="rounded-lg items-center h-[100px] w-[200px]" src={videoData.snippet.thumbnails.medium.url} />
+                <div className="w-[280px] p-1 text-sm">
+                     <h2 className="font-semibold">{videoData.snippet.title.substring(0,33)+"..."}</h2>
+                    <h2 className="text-slate-600 font-semibold">{videoData.snippet.channelTitle}</h2>
+                     <h2> {t}</h2>
+                 </div>
             </div>
-            </Link>
+        </div>
+    </Link>
 }
 
 export default SideVideos;
